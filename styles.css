@@ -110,3 +110,15 @@ h4 {
 .form-outline.mb-4 {
     opacity: .8;
 }
+
+h2.text-uppercase.text-center.mb-5 {
+    display: inline-flex;
+    margin-bottom: unset !important;
+}
+
+#heart_chat {
+    display: inline-flex;
+    margin-right: .2em;
+    float: left;
+    margin-bottom: .3em;
+}
