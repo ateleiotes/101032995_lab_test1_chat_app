@@ -1,0 +1,150 @@
+<html>
+    <!DOCTYPE html>
+    <html lang="en">
+    
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+            <title>Chat</title>
+        
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+                  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+           
+                  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+                    crossorigin="anonymous">
+            </script>
+            <link rel="stylesheet" type="text/css" href="styles.css" />
+
+
+            <script src="/socket.io/socket.io.js"></script>
+            
+        
+            <link href="https://getbootstrap.com/docs/5.1/examples/sign-in/signin.css" rel="stylesheet">
+        </head>
+    
+    <body class="text-center">
+        
+        <!--Background Image-->
+        <article class="wrapper">
+
+        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div class="container h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                        <div style="border-radius: 15px;">
+                            <div>
+                                <h2 class="text-uppercase text-center mb-5">Welcome to Socket chatroom, please
+                                    select a room..</h2>
+                                <div class="form-outline mb-4">
+                                    <select name="rooms" id="rooms" class="form-control form-control-lg">
+                                        <option value='News'>News</option>
+                                        <option value='Covid-19'>Covid-19</option>
+                                        <option value='NodeJS'>NodeJS</option>
+                                    </select>
+                                    <button class="btn btn-dark btn-block btn-lg " onClick='join()'>Join Room</button>
+ 
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <textarea type="text" id="roomMessage" value="" name="roomMessage"
+                                        class="form-control form-control-lg"></textarea>
+                                    <button class="btn btn-dark btn-block btn-lg " id="send" onClick='sendMessage()'>Send message</button>
+                                </div>
+                                <h1 id='roomName'></h1>
+
+
+                                <div class="d-flex justify-content-center">
+                                    <form action="/logout" method="get">
+                                        <button class="btn btn-dark btn-block btn-lg" id="logout_btn" type="submit">Logout</button>
+                                    </form>
+                                   
+                                </div>
+                                <div id = "outer-container">
+                                    <h4>Chat Box</h4>
+                                 <div id = "message-container"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</body>
+
+<script>
+    
+    username = getCookie('username')
+    // Username Validation
+    if(username==''){
+        console.log('user not logged in')
+        window.location.replace("http://localhost:3001/")
+    }
+
+    const client = io()
+
+    client.on('welcome', (message) => {
+        addMessage(message)
+    })
+
+    client.on('newMessage', (message) => {
+        addMessage(message)
+    })
+
+    // Send message to selected room
+    function sendMessage() {
+        message = document.getElementById('roomMessage').value
+
+        if(message != ''){
+        var roomName = document.getElementById('roomName').innerHTML
+        messageSend = {
+            room: roomName,
+            message: message,
+            username: username
+        }
+        console.log("Message send"+messageSend)
+        client.emit('messageRoom', messageSend)
+        addMessage(messageSend)
+        message.value=''
+    }
+    }
+
+    function addMessage(message){
+        document.getElementById('message-container').innerHTML += `<div> ${message.username}: ${message.message} </div>`
+     }
+
+    function getMessages(){
+      $.get('/groupMessages', (msg) => {
+          console.log(msg)
+        msg.forEach(addMessage);
+      })
+    }
+
+       
+    function join() {
+        let roomNameH = document.getElementById('roomName')
+        let roomNameDropdown = document.getElementById('rooms')
+        let roomName = roomNameDropdown.options[roomNameDropdown.selectedIndex].value
+        roomNameH.innerHTML = roomName
+        client.emit('joinRoom', roomName)
+    }
+    function getCookie(cookieName) {
+        let name = cookieName + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+</script>
+
+</html>
