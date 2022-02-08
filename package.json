@@ -1,0 +1,21 @@
+{
+    "name": "101032995_lab_test1_chat_app",
+    "version": "1.0.0",
+    "description": "Lab Test 1 Comp3133; Chat app with Socket.io",
+    "main": "server.js",
+    "scripts": {
+        "start": "nodemon server.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "cookie-parser": "^1.4.6",
+        "express": "^4.17.1",
+        "mongoose": "^5.11.13",
+        "npm-install-all": "^1.1.21",
+        "socket.io": "^3.1.0"
+    }
+}
