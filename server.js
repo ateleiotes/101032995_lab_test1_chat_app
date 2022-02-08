@@ -49,7 +49,6 @@ app.post('/messages', (req, res) => {
 })
 
 // Registration
-
 app.get('/register', function(req, res) {
     res.sendFile(__dirname + '/register.html');
 });
@@ -58,7 +57,7 @@ app.post('/register', async(req, res) => {
     const takenUsername = await User.findOne({ username: req.body.username })
 
     if (takenUsername) {
-        res.json({ message: 'Username has already been taken' })
+
     } else {
         const dbUser = new User({
             username: req.body.username,
@@ -73,7 +72,6 @@ app.post('/register', async(req, res) => {
 })
 
 // Login
-
 app.get('/rooms', function(req, res) {
     res.sendFile(__dirname + '/rooms.html');
 });
@@ -83,11 +81,11 @@ app.post('/login', async(req, res) => {
         const user = await User.findOne({ username: req.body.username })
         if (user.password == req.body.password) {
             res.cookie('username', user.username)
-            res.writeHead(301, { Location: `http://localhost:3001/rooms` });
+            res.writeHead(301, { Location: `http://localhost:3001/rooms` })
             res.end();
         }
     } else {
-        res.writeHead(301, { Location: 'http://localhost:3001/' });
+        res.writeHead(301, { Location: 'http://localhost:3001/' })
         res.end();
     }
 })
@@ -153,7 +151,8 @@ io.on('connection', (socket) => {
             message: data.message
         }
         console.log(`${data.username} sent a message to ${data.room}`)
-            // add messag to db
+
+        // Add message to db
         const dbGroupMessage = new GroupMessage({
             from_user: data.username,
             room: data.room,

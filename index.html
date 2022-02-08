@@ -25,14 +25,17 @@
     <article class="wrapper ">
     <main class="form-signin">
         <form action="/login" method="post">
-            
+           
             <!--Chat Heart-->
             
                  <svg xmlns="http://www.w3.org/2000/svg" width="72" height="57" fill="white" class="bi bi-chat-heart-fill" viewBox="0 0 16 16">
                     <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15Zm0-9.007c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
                   </svg>
             <h1 class="h3 mb-3 fw-normal" th:text="'Please Sign In'"></h1>
-    
+            
+            <!--ErrorBox-->
+            <p id="error"><p>
+
             <div class="form-floating">
                 <input type="text" class="form-control" id="username" placeholder="Username" name="username"
                        required="true"
@@ -47,7 +50,17 @@
                        oninvalid="this.setCustomValidity('Password cannot be blank')"
                        oninput="this.setCustomValidity('')">
                 <label for="password">Password</label>
+
+                
             </div>
+            <p1></p1>
+            <script>
+                function demoDisplay() {
+                    document.getElementById("p1").value = "Wrong user name or pass";
+                  }
+            </script>
+
+
             <div>
                 <input type="checkbox" onclick="showPass()" id="showPass" name="showPass" /><label class="css-label lite-gray-check" for="showPass">Show Password</label>
             </div>
